@@ -1,0 +1,28 @@
+workflows:
+  android-apk-build:
+    name: Square Dash APK Build
+    max_build_duration: 30
+    instance_type: mac_mini_m1
+    environment:
+      node: 20
+      groups:
+        - sdk_config 
+    scripts:
+      - name: Install dependencies
+        script: |
+          npm install
+      - name: Expo Prebuild
+        script: |
+          # This converts your App.js into a full Android project
+          npx expo prebuild --platform android --no-install
+      - name: Build Android APK
+        script: |
+          cd android
+          # This command creates the installable .apk file
+          ./gradlew assembleDebug
+    artifacts:
+      - android/app/build/outputs/apk/debug/*.apk
+    publishing:
+      email:
+        recipients:
+          - alexanderthegreat4624@gmail.com
